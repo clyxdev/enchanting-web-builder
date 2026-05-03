@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { DollarSign, Zap, ShieldCheck, History, Send, ArrowRight } from "lucide-react";
+import { DollarSign, Zap, ShieldCheck, History, Send, ArrowRight, Server } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/")({
@@ -26,6 +26,7 @@ const accentMap: Record<string, string> = {
 
 function HomePage() {
   const [team, setTeam] = useState<Team[]>([]);
+  const [configCount, setConfigCount] = useState<number | null>(null);
   const [tagline, setTagline] = useState(
     "Fastest Free VLESS, VMESS, TROJAN & SSH Configs. Bypass restrictions with military-grade encryption.",
   );
@@ -37,6 +38,24 @@ function HomePage() {
     supabase.from("site_settings").select("*").eq("key", "hero_tagline").maybeSingle().then(({ data }) => {
       if (data?.value) setTagline(data.value);
     });
+
+    const loadCount = () => {
+      supabase
+        .from("configs")
+        .select("*", { count: "exact", head: true })
+        .eq("is_active", true)
+        .then(({ count }) => setConfigCount(count ?? 0));
+    };
+    loadCount();
+
+    const channel = supabase
+      .channel("home-configs-live")
+      .on("postgres_changes", { event: "*", schema: "public", table: "configs" }, () => loadCount())
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, []);
 
   return (
@@ -48,7 +67,9 @@ function HomePage() {
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75" />
             <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-400" />
           </span>
-          <span className="text-muted-foreground">System Online · V2.0 Active</span>
+          <span className="text-muted-foreground">
+            System Online · {configCount ?? "—"} live config{configCount === 1 ? "" : "s"}
+          </span>
         </div>
 
         <h1 className="text-4xl md:text-6xl font-semibold tracking-tight leading-[1.05] mb-6">
@@ -66,7 +87,7 @@ function HomePage() {
             to="/configs"
             className="px-7 py-3 rounded-full bg-foreground text-background font-medium text-sm hover:opacity-90 transition-opacity inline-flex items-center justify-center gap-2"
           >
-            Get Free Configs <ArrowRight className="w-4 h-4" />
+            <Server className="w-4 h-4" /> Get Free Configs <ArrowRight className="w-4 h-4" />
           </Link>
           <a
             href="https://t.me/yourchannel"
