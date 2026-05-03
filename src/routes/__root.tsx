@@ -1,6 +1,9 @@
 import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
 
 import appCss from "../styles.css?url";
+import { ThemeProvider } from "@/lib/theme";
+import { SiteNav } from "@/components/SiteNav";
+import { Toaster } from "@/components/ui/sonner";
 
 function NotFoundComponent() {
   return (
@@ -29,14 +32,14 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "BLAC Tunnel — Premium VLESS, VMESS, TROJAN & SSH Configs" },
+      { name: "description", content: "Free, fast and secure VLESS, VMESS, TROJAN and SSH configs. Daily updates. Bypass restrictions with BLAC Tunnel." },
+      { name: "author", content: "BLAC Tunnel" },
+      { property: "og:title", content: "BLAC Tunnel — Premium Configs" },
+      { property: "og:description", content: "Free, fast and secure VPN tunnel configs updated daily." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: "BLAC Tunnel — Premium Configs" },
     ],
     links: [
       {
@@ -52,11 +55,11 @@ export const Route = createRootRoute({
 
 function RootShell({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" className="dark">
       <head>
         <HeadContent />
       </head>
-      <body>
+      <body className="min-h-screen bg-background text-foreground">
         {children}
         <Scripts />
       </body>
@@ -65,5 +68,15 @@ function RootShell({ children }: { children: React.ReactNode }) {
 }
 
 function RootComponent() {
-  return <Outlet />;
+  return (
+    <ThemeProvider>
+      <div className="min-h-screen flex flex-col">
+        <SiteNav />
+        <main className="flex-1">
+          <Outlet />
+        </main>
+      </div>
+      <Toaster richColors position="top-center" />
+    </ThemeProvider>
+  );
 }
