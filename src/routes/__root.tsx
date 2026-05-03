@@ -35,11 +35,14 @@ export const Route = createRootRoute({
       { title: "BLAC Tunnel — Premium VLESS, VMESS, TROJAN & SSH Configs" },
       { name: "description", content: "Free, fast and secure VLESS, VMESS, TROJAN and SSH configs. Daily updates. Bypass restrictions with BLAC Tunnel." },
       { name: "author", content: "BLAC Tunnel" },
-      { property: "og:title", content: "BLAC Tunnel — Premium Configs" },
-      { property: "og:description", content: "Free, fast and secure VPN tunnel configs updated daily." },
+      { property: "og:title", content: "BLAC Tunnel — Premium VLESS, VMESS, TROJAN & SSH Configs" },
+      { property: "og:description", content: "Free, fast and secure VLESS, VMESS, TROJAN and SSH configs. Daily updates. Bypass restrictions with BLAC Tunnel." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
-      { name: "twitter:title", content: "BLAC Tunnel — Premium Configs" },
+      { name: "twitter:title", content: "BLAC Tunnel — Premium VLESS, VMESS, TROJAN & SSH Configs" },
+      { name: "twitter:description", content: "Free, fast and secure VLESS, VMESS, TROJAN and SSH configs. Daily updates. Bypass restrictions with BLAC Tunnel." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/227929cf-b78e-479c-8718-32a5034b45d4/id-preview-bbaf89b8--73d15f01-3ce7-4ec3-9467-8c0b86ed35e1.lovable.app-1777818740547.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/227929cf-b78e-479c-8718-32a5034b45d4/id-preview-bbaf89b8--73d15f01-3ce7-4ec3-9467-8c0b86ed35e1.lovable.app-1777818740547.png" },
     ],
     links: [
       {
