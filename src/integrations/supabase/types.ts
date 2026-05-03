@@ -14,16 +14,133 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      configs: {
+        Row: {
+          config_string: string
+          country: string | null
+          created_at: string
+          id: string
+          is_active: boolean
+          name: string
+          notes: string | null
+          port: number
+          protocol: Database["public"]["Enums"]["config_protocol"]
+          server: string
+          updated_at: string
+        }
+        Insert: {
+          config_string: string
+          country?: string | null
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name: string
+          notes?: string | null
+          port?: number
+          protocol: Database["public"]["Enums"]["config_protocol"]
+          server: string
+          updated_at?: string
+        }
+        Update: {
+          config_string?: string
+          country?: string | null
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name?: string
+          notes?: string | null
+          port?: number
+          protocol?: Database["public"]["Enums"]["config_protocol"]
+          server?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      site_settings: {
+        Row: {
+          key: string
+          updated_at: string
+          value: string
+        }
+        Insert: {
+          key: string
+          updated_at?: string
+          value?: string
+        }
+        Update: {
+          key?: string
+          updated_at?: string
+          value?: string
+        }
+        Relationships: []
+      }
+      team_members: {
+        Row: {
+          accent: string
+          created_at: string
+          id: string
+          initial: string
+          name: string
+          role: string
+          sort_order: number
+        }
+        Insert: {
+          accent?: string
+          created_at?: string
+          id?: string
+          initial: string
+          name: string
+          role: string
+          sort_order?: number
+        }
+        Update: {
+          accent?: string
+          created_at?: string
+          id?: string
+          initial?: string
+          name?: string
+          role?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "user"
+      config_protocol: "VLESS" | "VMESS" | "TROJAN" | "SSH"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +267,9 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "user"],
+      config_protocol: ["VLESS", "VMESS", "TROJAN", "SSH"],
+    },
   },
 } as const
