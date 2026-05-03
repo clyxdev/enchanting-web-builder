@@ -15,7 +15,7 @@ function usernameToEmail(u: string) {
 
 function AdminLogin() {
   const [username, setUsername] = useState("shnwazdev");
-  const [password, setPassword] = useState("");
+  const [password, setPassword] = useState("dev");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -54,7 +54,7 @@ function AdminLogin() {
             <Lock className="w-5 h-5" />
           </div>
           <h1 className="text-xl font-semibold tracking-tight">Admin Access</h1>
-          <p className="text-xs text-muted-foreground mt-1">Restricted area.</p>
+          <p className="text-xs text-muted-foreground mt-1">Restricted area · use your admin credentials.</p>
         </div>
 
         <div className="space-y-4">
