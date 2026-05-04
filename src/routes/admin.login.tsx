@@ -1,65 +1,62 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 import { useState, type FormEvent } from "react";
 import { Lock, Loader2 } from "lucide-react";
+import { motion } from "framer-motion";
 import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
+import { adminLogin } from "@/server/admin.functions";
 
 export const Route = createFileRoute("/admin/login")({
-  head: () => ({ meta: [{ title: "Admin · BLAC Tunnel" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({
+    meta: [{ title: "Admin · BLAC Tunnel" }, { name: "robots", content: "noindex" }],
+  }),
   component: AdminLogin,
 });
 
-function usernameToEmail(u: string) {
-  return `${u.trim().toLowerCase()}@blac.local`;
-}
-
 function AdminLogin() {
-  const [username, setUsername] = useState("shnwazdev");
+  const [username, setUsername] = useState("dev");
   const [password, setPassword] = useState("dev");
   const [loading, setLoading] = useState(false);
+  const login = useServerFn(adminLogin);
   const navigate = useNavigate();
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault();
     setLoading(true);
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email: usernameToEmail(username),
-      password,
-    });
-    if (error || !data.user) {
+    try {
+      const result = await login({ data: { username, password } });
+      localStorage.setItem("blac-admin-token", result.token);
+      toast.success(`Welcome ${result.admin.display_name}`);
+      navigate({ to: "/admin" });
+    } catch {
+      toast.error("Invalid admin username or password");
+    } finally {
       setLoading(false);
-      toast.error("Invalid credentials");
-      return;
     }
-    const { data: roles } = await supabase
-      .from("user_roles")
-      .select("role")
-      .eq("user_id", data.user.id);
-    const isAdmin = roles?.some((r) => r.role === "admin");
-    if (!isAdmin) {
-      await supabase.auth.signOut();
-      setLoading(false);
-      toast.error("Not an admin account");
-      return;
-    }
-    toast.success("Welcome back");
-    navigate({ to: "/admin" });
   }
 
   return (
-    <div className="w-full max-w-md mx-auto px-4 py-20 anim-fade-up">
-      <form onSubmit={onSubmit} className="glass rounded-3xl p-8">
+    <div className="w-full max-w-md mx-auto px-4 py-14 sm:py-20">
+      <motion.form
+        onSubmit={onSubmit}
+        initial={{ opacity: 0, y: 18, scale: 0.98 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.35, ease: [0.2, 0.7, 0.2, 1] }}
+        className="glass rounded-3xl p-6 sm:p-8"
+      >
         <div className="text-center mb-8">
           <div className="w-12 h-12 mx-auto rounded-xl bg-foreground text-background flex items-center justify-center mb-4">
             <Lock className="w-5 h-5" />
           </div>
           <h1 className="text-xl font-semibold tracking-tight">Admin Access</h1>
-          <p className="text-xs text-muted-foreground mt-1">Restricted area · use your admin credentials.</p>
+          <p className="text-xs text-muted-foreground mt-1">Restricted area · dev panel.</p>
         </div>
 
         <div className="space-y-4">
           <div>
-            <label className="block text-xs font-medium text-muted-foreground mb-1.5">Username</label>
+            <label className="block text-xs font-medium text-muted-foreground mb-1.5">
+              Username
+            </label>
             <input
               value={username}
               onChange={(e) => setUsername(e.target.value)}
@@ -68,7 +65,9 @@ function AdminLogin() {
             />
           </div>
           <div>
-            <label className="block text-xs font-medium text-muted-foreground mb-1.5">Password</label>
+            <label className="block text-xs font-medium text-muted-foreground mb-1.5">
+              Password
+            </label>
             <input
               type="password"
               value={password}
@@ -86,7 +85,7 @@ function AdminLogin() {
             Authenticate
           </button>
         </div>
-      </form>
+      </motion.form>
     </div>
   );
 }

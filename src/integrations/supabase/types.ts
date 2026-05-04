@@ -14,6 +14,102 @@ export type Database = {
   }
   public: {
     Tables: {
+      admin_accounts: {
+        Row: {
+          created_at: string
+          display_name: string
+          id: string
+          is_active: boolean
+          password_hash: string
+          password_salt: string
+          updated_at: string
+          username: string
+        }
+        Insert: {
+          created_at?: string
+          display_name?: string
+          id?: string
+          is_active?: boolean
+          password_hash: string
+          password_salt: string
+          updated_at?: string
+          username: string
+        }
+        Update: {
+          created_at?: string
+          display_name?: string
+          id?: string
+          is_active?: boolean
+          password_hash?: string
+          password_salt?: string
+          updated_at?: string
+          username?: string
+        }
+        Relationships: []
+      }
+      admin_sessions: {
+        Row: {
+          admin_id: string
+          created_at: string
+          expires_at: string
+          id: string
+          last_seen_at: string
+          token_hash: string
+        }
+        Insert: {
+          admin_id: string
+          created_at?: string
+          expires_at: string
+          id?: string
+          last_seen_at?: string
+          token_hash: string
+        }
+        Update: {
+          admin_id?: string
+          created_at?: string
+          expires_at?: string
+          id?: string
+          last_seen_at?: string
+          token_hash?: string
+        }
+        Relationships: []
+      }
+      config_audit_logs: {
+        Row: {
+          action: string
+          actor_id: string
+          actor_name: string
+          config_id: string | null
+          config_name: string
+          created_at: string
+          id: string
+          metadata: Json
+          protocol: Database["public"]["Enums"]["config_protocol"] | null
+        }
+        Insert: {
+          action: string
+          actor_id: string
+          actor_name?: string
+          config_id?: string | null
+          config_name?: string
+          created_at?: string
+          id?: string
+          metadata?: Json
+          protocol?: Database["public"]["Enums"]["config_protocol"] | null
+        }
+        Update: {
+          action?: string
+          actor_id?: string
+          actor_name?: string
+          config_id?: string | null
+          config_name?: string
+          created_at?: string
+          id?: string
+          metadata?: Json
+          protocol?: Database["public"]["Enums"]["config_protocol"] | null
+        }
+        Relationships: []
+      }
       configs: {
         Row: {
           config_string: string
