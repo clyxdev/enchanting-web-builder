@@ -14,6 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      admin_accounts: {
+        Row: {
+          created_at: string
+          display_name: string
+          id: string
+          is_active: boolean
+          password_hash: string
+          password_salt: string
+          updated_at: string
+          username: string
+        }
+        Insert: {
+          created_at?: string
+          display_name?: string
+          id?: string
+          is_active?: boolean
+          password_hash: string
+          password_salt: string
+          updated_at?: string
+          username: string
+        }
+        Update: {
+          created_at?: string
+          display_name?: string
+          id?: string
+          is_active?: boolean
+          password_hash?: string
+          password_salt?: string
+          updated_at?: string
+          username?: string
+        }
+        Relationships: []
+      }
       config_audit_logs: {
         Row: {
           action: string
