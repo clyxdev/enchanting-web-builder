@@ -1,5 +1,6 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { Moon, Sun, Shield, Menu, X } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 import { useTheme } from "@/lib/theme";
 
@@ -32,13 +33,10 @@ export function SiteNav() {
                 <Link
                   key={l.to}
                   to={l.to}
-                  className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                    active
-                      ? "text-foreground bg-foreground/5"
-                      : "text-muted-foreground hover:text-foreground"
-                  }`}
+                  className={`relative px-3 py-2 rounded-md text-sm font-medium transition-colors ${active ? "text-foreground" : "text-muted-foreground hover:text-foreground"}`}
                 >
-                  {l.label}
+                  {active && <motion.span layoutId="nav-active-pill" className="absolute inset-0 rounded-md bg-foreground/5" transition={{ duration: 0.18 }} />}
+                  <span className="relative z-10">{l.label}</span>
                 </Link>
               );
             })}
@@ -62,20 +60,31 @@ export function SiteNav() {
           </div>
         </div>
 
-        {open && (
-          <div className="md:hidden pb-4 flex flex-col gap-1 anim-fade">
-            {links.map((l) => (
-              <Link
-                key={l.to}
-                to={l.to}
-                onClick={() => setOpen(false)}
-                className="px-3 py-2 rounded-md text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-foreground/5"
-              >
-                {l.label}
-              </Link>
-            ))}
-          </div>
-        )}
+        <AnimatePresence>
+          {open && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.2 }}
+              className="md:hidden overflow-hidden pb-4 flex flex-col gap-1"
+            >
+              {links.map((l) => {
+                const active = l.to === "/" ? path === "/" : path.startsWith(l.to);
+                return (
+                  <Link
+                    key={l.to}
+                    to={l.to}
+                    onClick={() => setOpen(false)}
+                    className={`px-3 py-2 rounded-md text-sm font-medium ${active ? "bg-foreground/5 text-foreground" : "text-muted-foreground hover:text-foreground hover:bg-foreground/5"}`}
+                  >
+                    {l.label}
+                  </Link>
+                );
+              })}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </nav>
   );

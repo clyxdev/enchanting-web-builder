@@ -181,8 +181,14 @@
   .anim-fade { animation: fade .35s ease-out both; }
   @keyframes fade { from { opacity: 0 } to { opacity: 1 } }
 
-  .card-hover { transition: transform .25s ease, border-color .25s ease, background-color .25s ease; }
+  .card-hover { transition: transform .22s ease, border-color .22s ease, background-color .22s ease; }
   .card-hover:hover { transform: translateY(-3px); border-color: color-mix(in oklab, var(--foreground) 14%, transparent); }
+
+  .page-soft { animation: page-soft .28s cubic-bezier(.2,.7,.2,1) both; }
+  @keyframes page-soft {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
 
   .anim-rise { animation: rise .6s cubic-bezier(.2,.7,.2,1) both; }
   @keyframes rise {
@@ -193,3 +199,8 @@
 
 ::-webkit-scrollbar { width: 8px; height: 8px; }
 ::-webkit-scrollbar-thumb { background: color-mix(in oklab, var(--foreground) 18%, transparent); border-radius: 8px; }
+
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
