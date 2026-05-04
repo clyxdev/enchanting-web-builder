@@ -204,7 +204,22 @@ function AdminDash() {
   async function toggleActive(c: Config) {
     if (!token) return;
     try {
-      await saveConfigFn({ data: { token, id: c.id, config: { ...c, is_active: !c.is_active } } });
+      await saveConfigFn({
+        data: {
+          token,
+          id: c.id,
+          config: {
+            name: c.name,
+            protocol: c.protocol,
+            server: c.server,
+            port: c.port,
+            config_string: c.config_string,
+            country: c.country ?? "",
+            notes: c.notes ?? "",
+            is_active: !c.is_active,
+          },
+        },
+      });
       await loadDashboard(token, true);
     } catch {
       toast.error("Status update failed");
