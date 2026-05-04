@@ -14,6 +14,42 @@ export type Database = {
   }
   public: {
     Tables: {
+      config_audit_logs: {
+        Row: {
+          action: string
+          actor_id: string
+          actor_name: string
+          config_id: string | null
+          config_name: string
+          created_at: string
+          id: string
+          metadata: Json
+          protocol: Database["public"]["Enums"]["config_protocol"] | null
+        }
+        Insert: {
+          action: string
+          actor_id: string
+          actor_name?: string
+          config_id?: string | null
+          config_name?: string
+          created_at?: string
+          id?: string
+          metadata?: Json
+          protocol?: Database["public"]["Enums"]["config_protocol"] | null
+        }
+        Update: {
+          action?: string
+          actor_id?: string
+          actor_name?: string
+          config_id?: string | null
+          config_name?: string
+          created_at?: string
+          id?: string
+          metadata?: Json
+          protocol?: Database["public"]["Enums"]["config_protocol"] | null
+        }
+        Relationships: []
+      }
       configs: {
         Row: {
           config_string: string
