@@ -35,7 +35,13 @@ export function SiteNav() {
                   to={l.to}
                   className={`relative px-3 py-2 rounded-md text-sm font-medium transition-colors ${active ? "text-foreground" : "text-muted-foreground hover:text-foreground"}`}
                 >
-                  {active && <motion.span layoutId="nav-active-pill" className="absolute inset-0 rounded-md bg-foreground/5" transition={{ duration: 0.18 }} />}
+                  {active && (
+                    <motion.span
+                      layoutId="nav-active-pill"
+                      className="absolute inset-0 rounded-md bg-foreground/5"
+                      transition={{ duration: 0.18 }}
+                    />
+                  )}
                   <span className="relative z-10">{l.label}</span>
                 </Link>
               );

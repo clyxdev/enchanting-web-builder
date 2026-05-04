@@ -17,7 +17,10 @@ const configSchema = z.object({
 });
 
 const tokenSchema = z.object({ token: z.string().min(32) });
-const loginSchema = z.object({ username: z.string().trim().min(1).max(40), password: z.string().min(1).max(120) });
+const loginSchema = z.object({
+  username: z.string().trim().min(1).max(40),
+  password: z.string().min(1).max(120),
+});
 
 function sha256(value: string) {
   return createHash("sha256").update(value).digest("hex");
@@ -37,7 +40,8 @@ async function requireAdmin(token: string) {
     .eq("token_hash", tokenHash)
     .maybeSingle();
 
-  if (error || !session || new Date(session.expires_at).getTime() <= Date.now()) throw new Error("Unauthorized");
+  if (error || !session || new Date(session.expires_at).getTime() <= Date.now())
+    throw new Error("Unauthorized");
 
   const { data: admin, error: adminError } = await supabaseAdmin
     .from("admin_accounts")
@@ -46,7 +50,10 @@ async function requireAdmin(token: string) {
     .maybeSingle();
 
   if (adminError || !admin?.is_active) throw new Error("Unauthorized");
-  await supabaseAdmin.from("admin_sessions").update({ last_seen_at: new Date().toISOString() }).eq("id", session.id);
+  await supabaseAdmin
+    .from("admin_sessions")
+    .update({ last_seen_at: new Date().toISOString() })
+    .eq("id", session.id);
   return admin;
 }
 
@@ -61,7 +68,11 @@ export const adminLogin = createServerFn({ method: "POST" })
       .maybeSingle();
 
     const digest = admin ? sha256(`${admin.password_salt}:${data.password}`) : "";
-    if (error || !admin?.is_active || !safeEqualHex(digest.padEnd(64, "0"), (admin?.password_hash ?? "").padEnd(64, "0"))) {
+    if (
+      error ||
+      !admin?.is_active ||
+      !safeEqualHex(digest.padEnd(64, "0"), (admin?.password_hash ?? "").padEnd(64, "0"))
+    ) {
       throw new Error("Invalid credentials");
     }
 
@@ -86,21 +97,35 @@ export const getAdminDashboard = createServerFn({ method: "POST" })
   .inputValidator((data) => tokenSchema.parse(data))
   .handler(async ({ data }) => {
     await requireAdmin(data.token);
-    const [{ data: configs, error: configError }, { data: logs, error: logError }] = await Promise.all([
-      supabaseAdmin.from("configs").select("*").order("created_at", { ascending: false }),
-      supabaseAdmin.from("config_audit_logs").select("*").order("created_at", { ascending: false }).limit(12),
-    ]);
+    const [{ data: configs, error: configError }, { data: logs, error: logError }] =
+      await Promise.all([
+        supabaseAdmin.from("configs").select("*").order("created_at", { ascending: false }),
+        supabaseAdmin
+          .from("config_audit_logs")
+          .select("*")
+          .order("created_at", { ascending: false })
+          .limit(12),
+      ]);
     if (configError) throw configError;
     if (logError) throw logError;
     return { configs: configs ?? [], logs: logs ?? [] };
   });
 
 export const saveAdminConfig = createServerFn({ method: "POST" })
-  .inputValidator((data) => z.object({ token: z.string().min(32), id: z.string().uuid().optional(), config: configSchema }).parse(data))
+  .inputValidator((data) =>
+    z
+      .object({ token: z.string().min(32), id: z.string().uuid().optional(), config: configSchema })
+      .parse(data),
+  )
   .handler(async ({ data }) => {
     const admin = await requireAdmin(data.token);
     const result = data.id
-      ? await supabaseAdmin.from("configs").update(data.config).eq("id", data.id).select("*").single()
+      ? await supabaseAdmin
+          .from("configs")
+          .update(data.config)
+          .eq("id", data.id)
+          .select("*")
+          .single()
       : await supabaseAdmin.from("configs").insert(data.config).select("*").single();
     if (result.error) throw result.error;
 
@@ -111,16 +136,26 @@ export const saveAdminConfig = createServerFn({ method: "POST" })
       action: data.id ? "updated" : "created",
       actor_id: admin.id,
       actor_name: admin.display_name || admin.username,
-      metadata: { server: result.data.server, port: result.data.port, active: result.data.is_active },
+      metadata: {
+        server: result.data.server,
+        port: result.data.port,
+        active: result.data.is_active,
+      },
     });
     return result.data;
   });
 
 export const deleteAdminConfig = createServerFn({ method: "POST" })
-  .inputValidator((data) => z.object({ token: z.string().min(32), id: z.string().uuid() }).parse(data))
+  .inputValidator((data) =>
+    z.object({ token: z.string().min(32), id: z.string().uuid() }).parse(data),
+  )
   .handler(async ({ data }) => {
     const admin = await requireAdmin(data.token);
-    const { data: existing, error: readError } = await supabaseAdmin.from("configs").select("*").eq("id", data.id).single();
+    const { data: existing, error: readError } = await supabaseAdmin
+      .from("configs")
+      .select("*")
+      .eq("id", data.id)
+      .single();
     if (readError) throw readError;
     const { error } = await supabaseAdmin.from("configs").delete().eq("id", data.id);
     if (error) throw error;

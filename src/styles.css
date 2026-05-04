@@ -150,7 +150,9 @@
 
 /* Glass + utilities (no glow) */
 @layer utilities {
-  .font-mono { font-family: "JetBrains Mono", ui-monospace, monospace; }
+  .font-mono {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+  }
 
   .glass {
     background: color-mix(in oklab, var(--background) 70%, transparent);
@@ -170,37 +172,94 @@
     color: transparent;
   }
 
-  .hide-scrollbar::-webkit-scrollbar { display: none; }
-  .hide-scrollbar { scrollbar-width: none; }
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .hide-scrollbar {
+    scrollbar-width: none;
+  }
 
-  .anim-fade-up { animation: fade-up .5s cubic-bezier(.2,.7,.2,1) both; }
+  .anim-fade-up {
+    animation: fade-up 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
   @keyframes fade-up {
-    from { opacity: 0; transform: translateY(12px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
-  .anim-fade { animation: fade .35s ease-out both; }
-  @keyframes fade { from { opacity: 0 } to { opacity: 1 } }
+  .anim-fade {
+    animation: fade 0.35s ease-out both;
+  }
+  @keyframes fade {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
 
-  .card-hover { transition: transform .22s ease, border-color .22s ease, background-color .22s ease; }
-  .card-hover:hover { transform: translateY(-3px); border-color: color-mix(in oklab, var(--foreground) 14%, transparent); }
+  .card-hover {
+    transition:
+      transform 0.22s ease,
+      border-color 0.22s ease,
+      background-color 0.22s ease;
+  }
+  .card-hover:hover {
+    transform: translateY(-3px);
+    border-color: color-mix(in oklab, var(--foreground) 14%, transparent);
+  }
 
-  .page-soft { animation: page-soft .28s cubic-bezier(.2,.7,.2,1) both; }
+  .page-soft {
+    animation: page-soft 0.28s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
   @keyframes page-soft {
-    from { opacity: 0; transform: translateY(8px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
-  .anim-rise { animation: rise .6s cubic-bezier(.2,.7,.2,1) both; }
+  .anim-rise {
+    animation: rise 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
   @keyframes rise {
-    from { opacity: 0; transform: translateY(20px) scale(.98); }
-    to { opacity: 1; transform: translateY(0) scale(1); }
+    from {
+      opacity: 0;
+      transform: translateY(20px) scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
   }
 }
 
-::-webkit-scrollbar { width: 8px; height: 8px; }
-::-webkit-scrollbar-thumb { background: color-mix(in oklab, var(--foreground) 18%, transparent); border-radius: 8px; }
-
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: color-mix(in oklab, var(--foreground) 18%, transparent);
+  border-radius: 8px;
+}
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

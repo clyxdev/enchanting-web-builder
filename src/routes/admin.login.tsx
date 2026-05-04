@@ -7,7 +7,9 @@ import { toast } from "sonner";
 import { adminLogin } from "@/server/admin.functions";
 
 export const Route = createFileRoute("/admin/login")({
-  head: () => ({ meta: [{ title: "Admin · BLAC Tunnel" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({
+    meta: [{ title: "Admin · BLAC Tunnel" }, { name: "robots", content: "noindex" }],
+  }),
   component: AdminLogin,
 });
 
@@ -52,7 +54,9 @@ function AdminLogin() {
 
         <div className="space-y-4">
           <div>
-            <label className="block text-xs font-medium text-muted-foreground mb-1.5">Username</label>
+            <label className="block text-xs font-medium text-muted-foreground mb-1.5">
+              Username
+            </label>
             <input
               value={username}
               onChange={(e) => setUsername(e.target.value)}
@@ -61,7 +65,9 @@ function AdminLogin() {
             />
           </div>
           <div>
-            <label className="block text-xs font-medium text-muted-foreground mb-1.5">Password</label>
+            <label className="block text-xs font-medium text-muted-foreground mb-1.5">
+              Password
+            </label>
             <input
               type="password"
               value={password}
